@@ -98,9 +98,10 @@
         font-size: 1.2rm;
         padding: 5px 8px;
     }
+
     h3.prob {
         font-weight: bold;
-        border-top: 0.5px #888;
+        padding-top: 16px
     }
 
     .subheading{
