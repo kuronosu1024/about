@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>週記-20260704 - kuronosu1024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://kuronosu1024.github.io/about/style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> <!--上と二つ合わせてc++コードのエディタ風表示用-->
+
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><!--latexみたいに数式を書く用-->
+
+    <style>
+    </style>
+</head>
+<body>
+    
+<div class="container">
+    <header>
+        週記 - 20260704 (ABC465)
+    </header>
+</div>
+
+<div class="container">
+    <main>
+        <section id="diary">
+            <h2>雑記</h2>
+            <p>
+                一歩ずつ死の音（受験）が近づいてきて怖い<br>
+                ABCに出てる暇なんてほんとはないのかもしれない<br>
+            </p>
+        </section>
+        <section id="ABC">
+            <h2><a href="https://atcoder.jp/contests/abc465">ABC465</a>参加記の部分</h2>
+            <p>
+                <del>ABCシロコ</del><br>
+                A~D, Fの5完青中位perfだった<br>
+                最近はどうもperfが渋かったので、久しぶりにまぁまぁなperfを取れて、まぁまぁうれしい<br>
+                perfは下限を上げるのが大事とはよく言うが、上限が低いとあまり面白くない（重要）ので、こういう上振れもどんどん引きたい<br>
+            </p>
+            <p class="text-small">
+                やはりE問題は飛ばすべきなのか？
+            </p>
+            <p>
+                <a href="https://atcoder.jp/contests/abc465/submissions?f.Task=&f.LanguageName=&f.Status=&f.User=kuronosu1024">今回の提出一覧</a>
+            </p>
+
+            <h3 id="A">A : Supermajority <div class ="text-small">(0'44)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int a,b; cin >> a >> b;
+    if(a * 3 > b * 2) cout << "Yes\n";
+    else cout << "No\n";
+}
+            </code></pre>
+            <p>
+                誤差が出ない形に直して判定<br>
+            </p>
+
+            <h3 id="C">C : Reverse Permutation <div class ="text-small">(13'25)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin >> n;
+    string s; cin >> s;
+
+    vector<ll> ans(n);
+    int i;
+    int l=0, r = n-1; bool b = false;
+
+    rep(i,n){
+        int x = n-i-1;
+        if(s[x] == 'o'){
+            b=!b;
+            if(b){
+                ans[l] = x; l++;
+            }else{
+                ans[r] = x; r--;
+            }
+        }else{
+            if(b){
+                ans[l] = x; l++;
+            }else{
+                ans[r] = x; r--;
+            }
+        }
+    }
+    rep(i,n) cout << ans[i]+1 << " ";
+}
+            </code></pre>
+            <p>
+                末尾の数字\(N\)の位置は\(s[N-1]=\)<code>'o'</code>なら左端、でなければ右端<br>
+                反転したかのフラグを持ちながら、末尾から順に先頭まで位置を確定させていく<Br>
+            </p>
+
+            <h3 id="B">B : Supermajority <div class ="text-small">(16'10 1x)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int x,y,l,r,a,b; cin >> x>>y >> l >> r >> a >> b;
+    ll ans = 0;
+
+     int i;
+     rep(i,30){
+        if(a&lt;=i && i&lt;b){
+            if(l&lt;=i && i&lt;r) ans += x;
+            else ans += y;
+        }
+     }
+     cout << ans;
+}
+            </code></pre>
+            <p>
+                一回目普通に賢くやったつもりが通ってなかったので、愚直解<br>
+                もったいない1ペナ、良くない<br>
+
+            </p>
+
+            <h3 id="D">D : X to Y <div class ="text-small">(20'39)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int t ; cin >> t;
+    for(;t--;){
+        ll x, y, k; cin >> x >> y >> k;
+        ll ans = 0;
+        while(x!=y){
+            if(x&lt;y) swap(x,y);
+            x/=k;
+            ans++;
+        }
+        cout << ans << "\n";
+    }
+}
+            </code></pre>
+            <p>
+                \(x\)について逆操作ができるので、ゴールのほうも置き換えていってよいとできる<br>
+                あと、操作を言い換えると<br>
+                \(x=yk+\alpha\)  \((0\leq \alpha&lt; k )\)<br>
+                \(y=xk+\alpha\)  \((0\leq \alpha&lt; k )\)<br>
+                を満たす\(y\)に変換ができます、ということなので、\(x\)と\(y\)をでかくして合流させようとすると\(k\)で割った商が一生一致しないと分かるから、\(x\)も\(y\)も小さくしましょう、一致したら終わり
+            </p>
+
+            <h3 id="F">F : Sjeltzer? <div class ="text-small">(84'13)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin >> n;
+    // map<int,ll> v;
+    int i;
+    
+    vector<ll> sum(1000000,0);
+
+    rep(i,n){
+        int x,y; cin >>x >> y;
+        sum[x]+=y;
+    }
+    {
+        rep(i,1000000){
+            if(i%10 != 0) sum[i] += sum[i-1];
+        }
+        rep(i,1000000){
+            if((i/10)%10 != 0) sum[i] += sum[i-10];
+        }
+        rep(i,1000000){
+            if((i/100)%10 != 0) sum[i] += sum[i-100];
+        }
+        rep(i,1000000){
+            if((i/1000)%10 != 0) sum[i] += sum[i-1000];
+        }
+        rep(i,1000000){
+            if((i/10000)%10 != 0) sum[i] += sum[i-10000];
+        }
+        rep(i,1000000){
+            if((i/100000)%10 != 0) sum[i] += sum[i-100000];
+        }
+    }
+
+
+
+
+    int q; cin >> q;
+    int _;
+    rep(_,q){
+        int x,y ; cin >> x >> y;
+        array<int,6> p,q;
+        int d = 10;
+        rep(i,6){ p[i] = x%d -d/10; x/=d; x*=d; d*=10;}
+        d=10;
+        rep(i,6){ q[i] = y%d; y/=d; y*=d; d*=10;}
+        bool b = false;
+        rep(i,6){
+            if(p[i] >= q[i]) b=true; 
+        }
+        if(b) {
+            cout << "0\n";
+            continue;
+        }
+
+
+        int j;
+        ll ans = 0;
+        rep(i,1<<6){
+            int pc = __builtin_popcount(i);
+            int k = 0;
+            ll la = 0;
+            rep(j,6){
+                if(k==-1) break;
+                if((i>>j)&1){
+                    k += p[j];
+                    if(p[j] < 0) k = -1;
+                }else{
+                    k += q[j];
+                }
+            }
+            if(k==-1) continue;
+            
+            ans += (pc&1 == 1 ? -1 : 1) * sum[k];
+        }
+
+        cout << ans << "\n";
+    }
+
+
+}
+            </code></pre>
+            <p>
+                6次元累積和（えぐい）<br>
+                最初は累積和の前計算も包除原理でやろうとおもったが、次元数を\(d\)として\(O(2^{d} \times 10^{d})\)かかることに気付いてあれ？ってなったので、どうしよ～～って思ったらゼータ変換の存在を思い出した(\(O(d10^d)\))<br>
+                取得は\(Q\)回しか行わないので、包除原理でいいです(\(O(d2^dQ)\))
+            </p>
+
+            <h3 id="E">E : Digit Circus <div class ="text-small">(--'--)</div></h3> 
+            
+            <p>
+                解けんかった<br>
+                桁dpって言われれば解けた<br>
+                ↑言われなくても解け<br>
+            </p>
+        </section>
+
+        <section>
+            <h2>駄文</h2>
+            <p>
+                土日に模試がある場合は、休みを確保するために、一年の日数を増やして休日を挿入してください<br>
+                あるいは冷たい水をください<Br>
+                    <br>
+                はい、変なこと書いてないで勉強します、するので、どうか殴らないでください
+            </p>
+        </section>
+
+    </main>
+
+    <aside>
+        <div class="sidebar">
+
+            <h3><a href="https://kuronosu1024.github.io/about/">メインページへ</a></h3><br>
+            <h3><a href="https://kuronosu1024.github.io/about/diary/top.html">雑記のトップページへ</a></h3>
+
+            <hr>
+            <h3> 目次</h3>
+
+            <ul>
+                <li><a href="#diary">雑記</a></li>
+                <li><a href="#ABC">ABC465</a> </li>
+                <ul>
+                    <li><a href="#A">A</a></li>
+                    <li><a href="#C">C</a></li>
+                    <li><a href="#B">B</a></li>
+                    <li><a href="#D">D</a></li>
+                    <li><a href="#F">F</a></li>
+                    <li><a href="#E">E</a></li>
+                </ul>
+            </ul>
+
+            <hr>
+
+            <a href="#">一番上へ</a><br>
+
+        </div>
+        
+    </aside>
+
+</div>
+<script> hljs.highlightAll(); </script>
+
+<footer>
+    © 2026 kuronosu1024
+</footer>
+
+</body>
+</html>

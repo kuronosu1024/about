@@ -98,6 +98,10 @@
         font-size: 1.2rm;
         padding: 5px 8px;
     }
+    h3.prob {
+        font-weight: bold;
+        border-top: 0.5px #888;
+    }
 
     .subheading{
         padding-top: 12px;
@@ -113,6 +117,7 @@
 
     .text-small {
         font-size: 0.7rem;
+        font-weight: normal;
         color: #777;
     }
 
@@ -149,6 +154,13 @@
     }
 
     /* コード */
+    code{  
+        color: #c7254e;
+        background-color: #f9f2f4;
+        border-radius: 3px;
+        font-family: Consolas, monospace;
+    }
+
     .code-lite {
         background: #f6f8fa;
         padding: 10px 18px;
