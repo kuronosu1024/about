@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>週記-20260704 - kuronosu1024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> <!--上と二つ合わせてc++コードのエディタ風表示用-->
+
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><!--latexみたいに数式を書く用-->
+
+    <style>
+    </style>
+    
+</head>
+<body>
+    
+<div class="container">
+    <header>
+        週記 - 20260711 (ABC466)
+    </header>
+</div>
+
+<div class="container">
+    <main>
+        <section id="diary">
+            <h2>雑記</h2>
+            <p>
+                今日は、このクソ暑い中自転車で学校に行って（往復2時間）、30分自習した後、飽きてカラオケに行きました（2時間30分、一人）<br>
+                楽しかったです<br>
+                殺してください<br>
+            </p>
+        </section>
+        <section id="ABC">
+            <h2><a href="https://atcoder.jp/contests/abc466">ABC466</a>参加記の部分</h2>
+            <p>
+                
+                久しぶりに6完(G以外)<br>
+                なんと、<a href="https://atcoder.jp/contests/abc442/standings?watching=kuronosu1024">半年ぶり</a><br>
+
+            </p>
+            <p class="text-small">
+                結局E問題は飛ばさなくてもよかった
+            </p>
+            <p>
+                <a href="https://atcoder.jp/contests/abc466/submissions?f.Task=&f.LanguageName=&f.Status=&f.User=kuronosu1024">今回の提出一覧</a>
+            </p>
+
+            <h3 id="A" class="prob">A - Compromise  <div class ="text-small">(1'30)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin >> n; bool ans = true;
+
+    for(;n--;){
+        int x; cin >> x;
+        if(x >= 0) ans = false;
+    }
+
+    if(ans ) cout << "Yes\n";
+    else cout << "No\n";
+
+}
+            </code></pre>
+            <p>
+                \(N\)個のうち一個でも非負整数があれば<code>No</code><br>
+            </p>
+
+            
+            <h3 id="B" class="prob">B - Representative Balls <div class ="text-small">(16'07)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n,m;cin >> n >> m;
+    map<int,int> p;
+
+    int i;
+    rep(i,n){
+        int c,s; cin >> c >> s;
+        p[c] = max(p[c], s);
+    }
+
+
+    rep(i,m){
+        if(p[i+1] != 0) cout  << p[i+1] << " ";
+        else cout << "-1 ";
+    }
+}
+            </code></pre>
+            <p>
+                やって終わりと思って、Test&Submitボタンを押してC見に行ってたら、提出一覧見たときになんか足りてなくて、<br>
+                もしやと思ってB戻ってきたら、なんかCE出てて、気付くのが遅かった
+
+                mapに各色の最大サイズを入れた、制約的にはvectorでもいい
+            </p>
+
+            <h3 id="C" class="prob">C - Count Close Pairs  <div class ="text-small">(17:15 1x)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin >> n;
+
+    ll ans = 0;
+    int l=1,r=2;
+
+    while(true){
+        cout << "? " << l << " " << r << endl;
+        string ret;
+        cin >> ret;
+
+        if(ret == "Yes"){
+            r++;
+            if(r==n+1){
+                ans += (r-1-l)*(r-1-l+1)/2;
+                break;
+            }
+        }else{
+            ans += r-l-1;
+            l++;
+            if(r==l) r++;
+            if(r==n+1){
+                break;
+            }
+        }
+    }
+
+    cout << "! " << ans << endl;
+}
+            </code></pre>
+            <p>
+                この問題は インタラクティブな問題（あなたが作成したプログラムとジャッジプログラムが標準入出力を介して対話を行う形式の問題）です。<Br>
+                ↑？？？？？？ これCだぞ？？？<br>
+                とてもびっくりするが、尺取り法でよい<br>
+                左端=iを固定して、返事が<code>yes</code>から<code>no</code>に変わる右端=jを見つけると、j-iだけ答えが増えます<br>
+                なぜか、掛け算と足し算を間違えて1ペナ<br>
+                ↑？？？？？？ 水色コーダーさん？？
+            </p>
+
+
+            <h3 id="D" class="prob">D - Placing Rooks <div class ="text-small">(21'46)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n, m;cin >> n>> m;
+    int i;
+
+    vector<int> x(n,-1), y(n,-1);
+    rep(i,m){
+        int r, c; cin >> r >> c;
+        r--;c--;
+        if(x[r] != -1){
+            y[x[r]] = -1;
+        }
+        if(y[c] != -1){
+            x[y[c]] = -1;
+        }
+
+        x[r] = c;
+        y[c] = r;
+    }
+
+    ll ans  = 0;
+    rep(i,n){
+        if(x[i] != -1) ans++;
+    }
+    cout << ans;
+}
+            </code></pre>
+            <p>
+                各行各列に高々一個しか石が存在しないので、vector二本持って、消す操作を実現する<Br>
+                <div class="text-small">Cより簡単じゃね？</div>
+            </p>
+
+            <h3 id="E" class="prob">E - Range Flip <div class ="text-small">(46'15)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n, k; cin >> n >> k;
+
+    vector<pair<ll,ll>> a(n);
+    int i;
+    rep(i,n) cin >> a[i].first >> a[i].second;
+
+    vector<vector<ll>> dp(n+1, vector<ll>(k+1,0));
+
+    ll x=0, y=0;
+    int j; i=0;
+    rep(j,n){
+        x += a[j].first;
+        y = max(y+a[j].second, x);
+        dp[j+1][i] = dp[j][i];
+        dp[j+1][i] = max(dp[j+1][i], y);
+    }
+    
+    rep(i,k){
+        if(i==0) continue;
+        x=0;y=0;
+        ll z= 0;    
+        rep(j,n){
+            x = dp[j+1][i-1];
+            y = max(y+a[j].first, x);
+            z = max(z+a[j].second, y);
+
+            dp[j+1][i] = dp[j][i];
+            dp[j+1][i] = max(dp[j+1][i], z);
+        }
+    }
+    ll ans = 0;
+
+    rep(i,n){
+        ans = max(ans + a[i].first, dp[i+1][k-1]);
+    }
+    cout << ans;
+
+} 
+            </code></pre>
+            <p>
+                区間が被るような二つの範囲のflipは、被らないような二つに組み替えられる（公式解説参照）ので、
+                被らないk個までの区間としてOK<br>
+                dp[j][i]で（これまでのflip回数i回、現在見ているカード1~jとして）1~jでi回までflipしたときの最大スコア（ただし、カードjは裏返しになるようにflip）
+                とすれば、遷移が上のコードみたいに書けるので、あとは、どこでflipを終えているべきか探す
+            </p>
+
+            <h3 id="F" class="prob">F - Many Mod Calculation <div class ="text-small">(92'02)</div></h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int t; cin >> t;
+    for(;t--;){
+        ll n, x; 
+        cin >> n >> x;
+        vector<ll> a(n);
+        int i;
+        rep(i,n) cin >> a[i];
+        vector<ll> b; b.reserve(n);
+        b.push_back(x+1);
+
+        rep(i,n){
+            if(b.empty() || (*b.rbegin()) > a[i]){
+                b.push_back(a[i]);
+            } 
+        }
+        n = b.size();
+        
+        vector<ll> ans(n+1,0);
+        ans[n] = 1;
+        rep(i,n-1){
+            ll x = b[n-i-1], y = b[n-i-2]; //y>x;
+            if(i==0){
+                ans[n-i-1] += (y-1)/x +1;
+            }else{
+                ans[n-i-1] += ((y-1)/x ) * (ans[n-i]);
+                ll rem = y%x;
+                while(rem>0){
+                    int l = n-i-1, r = n; // l ng / r ok
+                    while(r-l > 1){
+                        int m = (r+l)/2;
+                        if(rem >= b[m]) r = m;
+                        else l = m;
+                    }
+                    if(r == n) {ans[n-i-1]++; break;}
+                    ans[n-i-1] += ((rem)/b[r]) * (ans[r+1]);
+                    rem %= b[r];
+                }
+            }
+
+        }
+        cout << ans[1]-1 << "\n";
+
+
+    }
+} 
+            </code></pre>
+            <p>
+                Aの先頭にX+1をくっつけると、あとで楽です<br>
+                まずは、Aを降順にスターリンソート（粛清ソート）します
+                <def class="text-small">後に出てくる大きい数字は計算結果に何ら影響を及ぼさないので</def><br>
+                <def class="text-small">あと、コードではこれは配列bに該当します</def><br>
+                
+                そしたら、後ろから順に、<code>a[i], a[i+1]</code>についての部分問題
+                
+                <div class = "code-lite">
+                    \(0\leq x < a[i]\)を満たすxのうち、\(  ((x \mod a[i+1]) \mod a[i+2])... \mod a[n-1]  = 0\)<br>
+                    を満たすxの数を求めてください
+                </div>   
+                を解いていくと、答え+1<def class="text-small"> (0そのものは答えとしてカウントされないので)</def>が得られて、ACできます<br>
+                これの解き方は、かなり感覚でやってて言語化に1年かかりそうなので、書かない<br>
+                
+            </p>
+        </section>
+
+        <section>
+            <h2>駄文</h2>
+            <p>
+                どんだけ寝ても眠くて、最近は10時間/日寝てるのにまだ眠かったりして、そのうち一生目覚めないんじゃないかっていう不安は別にないけど、普通に、困る<br>
+                集中できない
+            </p>
+        </section>
+
+    </main>
+
+    <aside>
+        <div class="sidebar">
+
+            <h3><a href="https://kuronosu1024.github.io/about/">メインページへ</a></h3><br>
+            <h3><a href="https://kuronosu1024.github.io/about/diary/top.html">雑記のトップページへ</a></h3>
+
+            <hr>
+            <h3> 目次</h3>
+
+            <ul>
+                <li><a href="#diary">雑記</a></li>
+                <li><a href="#ABC">ABC466</a> </li>
+                <ul>
+                    <li><a href="#A">A</a></li>
+                    <li><a href="#B">B</a></li>
+                    <li><a href="#C">C</a></li>
+                    <li><a href="#D">D</a></li>
+                    <li><a href="#E">E</a></li>
+                    <li><a href="#F">F</a></li>
+                </ul>
+            </ul>
+
+            <hr>
+
+            <a href="#">一番上へ</a><br>
+
+        </div>
+        
+    </aside>
+
+</div>
+<script> hljs.highlightAll(); </script>
+
+<footer>
+    © 2026 kuronosu1024
+</footer>
+
+</body>
+</html>

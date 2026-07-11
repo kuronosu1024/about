@@ -4,7 +4,7 @@
 
     /* ベース */
     body {
-        font-family: "DotGothic16", sans-serif;
+        font-family: "ＭＳ ゴシック", monospace;
         margin: 0;
         background-color: #a1c7e0;
         color: #424256;
@@ -177,6 +177,7 @@
         text-align: left;
         font-size: 1.5rem;
         font-weight: normal;
+        font-family: 'DotGothic16', monospace;
     }
     /* footer */
     footer {
