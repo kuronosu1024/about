@@ -51,9 +51,9 @@
             <h3 id="A" class="prob">A : Supermajority <div class ="text-small">(0'44)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int a,b; cin >> a >> b;
-    if(a * 3 > b * 2) cout << "Yes\n";
-    else cout << "No\n";
+    int a,b; cin &gt;&gt; a &gt;&gt; b;
+    if(a * 3 &gt; b * 2) cout &lt;&lt; "Yes\n";
+    else cout &lt;&lt; "No\n";
 }
             </code></pre>
             <p>
@@ -63,10 +63,10 @@ int main(void){
             <h3 id="C" class="prob">C : Reverse Permutation <div class ="text-small">(13'25)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int n; cin >> n;
-    string s; cin >> s;
+    int n; cin &gt;&gt; n;
+    string s; cin &gt;&gt; s;
 
-    vector<ll> ans(n);
+    vector&lt;ll&gt; ans(n);
     int i;
     int l=0, r = n-1; bool b = false;
 
@@ -87,7 +87,7 @@ int main(void){
             }
         }
     }
-    rep(i,n) cout << ans[i]+1 << " ";
+    rep(i,n) cout &lt;&lt; ans[i]+1 &lt;&lt; " ";
 }
             </code></pre>
             <p>
@@ -98,17 +98,17 @@ int main(void){
             <h3 id="B" class="prob">B : Supermajority <div class ="text-small">(16'10 1x)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int x,y,l,r,a,b; cin >> x>>y >> l >> r >> a >> b;
+    int x,y,l,r,a,b; cin &gt;&gt; x&gt;&gt;y &gt;&gt; l &gt;&gt; r &gt;&gt; a &gt;&gt; b;
     ll ans = 0;
 
      int i;
      rep(i,30){
-        if(a&lt;=i && i&lt;b){
-            if(l&lt;=i && i&lt;r) ans += x;
+        if(a&lt;=i &amp;&amp; i&lt;b){
+            if(l&lt;=i &amp;&amp; i&lt;r) ans += x;
             else ans += y;
         }
      }
-     cout << ans;
+     cout &lt;&lt; ans;
 }
             </code></pre>
             <p>
@@ -120,16 +120,16 @@ int main(void){
             <h3 id="D" class="prob">D : X to Y <div class ="text-small">(20'39)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int t ; cin >> t;
+    int t ; cin &gt;&gt; t;
     for(;t--;){
-        ll x, y, k; cin >> x >> y >> k;
+        ll x, y, k; cin &gt;&gt; x &gt;&gt; y &gt;&gt; k;
         ll ans = 0;
         while(x!=y){
             if(x&lt;y) swap(x,y);
             x/=k;
             ans++;
         }
-        cout << ans << "\n";
+        cout &lt;&lt; ans &lt;&lt; "\n";
     }
 }
             </code></pre>
@@ -144,14 +144,14 @@ int main(void){
             <h3 id="F" class="prob">F : Sjeltzer? <div class ="text-small">(84'13)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int n; cin >> n;
-    // map<int,ll> v;
+    int n; cin &gt;&gt; n;
+    // map&lt;int,ll&gt; v;
     int i;
     
-    vector<ll> sum(1000000,0);
+    vector&lt;ll&gt; sum(1000000,0);
 
     rep(i,n){
-        int x,y; cin >>x >> y;
+        int x,y; cin &gt;&gt;x &gt;&gt; y;
         sum[x]+=y;
     }
     {
@@ -178,46 +178,46 @@ int main(void){
 
 
 
-    int q; cin >> q;
+    int q; cin &gt;&gt; q;
     int _;
     rep(_,q){
-        int x,y ; cin >> x >> y;
-        array<int,6> p,q;
+        int x,y ; cin &gt;&gt; x &gt;&gt; y;
+        array&lt;int,6&gt; p,q;
         int d = 10;
         rep(i,6){ p[i] = x%d -d/10; x/=d; x*=d; d*=10;}
         d=10;
         rep(i,6){ q[i] = y%d; y/=d; y*=d; d*=10;}
         bool b = false;
         rep(i,6){
-            if(p[i] >= q[i]) b=true; 
+            if(p[i] &gt;= q[i]) b=true; 
         }
         if(b) {
-            cout << "0\n";
+            cout &lt;&lt; "0\n";
             continue;
         }
 
 
         int j;
         ll ans = 0;
-        rep(i,1<<6){
+        rep(i,1&lt;&lt;6){
             int pc = __builtin_popcount(i);
             int k = 0;
             ll la = 0;
             rep(j,6){
                 if(k==-1) break;
-                if((i>>j)&1){
+                if((i&gt;&gt;j)&amp;1){
                     k += p[j];
-                    if(p[j] < 0) k = -1;
+                    if(p[j] &lt; 0) k = -1;
                 }else{
                     k += q[j];
                 }
             }
             if(k==-1) continue;
             
-            ans += (pc&1 == 1 ? -1 : 1) * sum[k];
+            ans += (pc&amp;1 == 1 ? -1 : 1) * sum[k];
         }
 
-        cout << ans << "\n";
+        cout &lt;&lt; ans &lt;&lt; "\n";
     }
 
 

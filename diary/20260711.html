@@ -52,15 +52,15 @@
             <h3 id="A" class="prob">A - Compromise  <div class ="text-small">(1'30)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int n; cin >> n; bool ans = true;
+    int n; cin &gt;&gt; n; bool ans = true;
 
     for(;n--;){
-        int x; cin >> x;
-        if(x >= 0) ans = false;
+        int x; cin &gt;&gt; x;
+        if(x &gt;= 0) ans = false;
     }
 
-    if(ans ) cout << "Yes\n";
-    else cout << "No\n";
+    if(ans ) cout &lt;&lt; "Yes\n";
+    else cout &lt;&lt; "No\n";
 
 }
             </code></pre>
@@ -72,19 +72,19 @@ int main(void){
             <h3 id="B" class="prob">B - Representative Balls <div class ="text-small">(16'07)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int n,m;cin >> n >> m;
-    map<int,int> p;
+    int n,m;cin &gt;&gt; n &gt;&gt; m;
+    map&lt;int,int&gt; p;
 
     int i;
     rep(i,n){
-        int c,s; cin >> c >> s;
+        int c,s; cin &gt;&gt; c &gt;&gt; s;
         p[c] = max(p[c], s);
     }
 
 
     rep(i,m){
-        if(p[i+1] != 0) cout  << p[i+1] << " ";
-        else cout << "-1 ";
+        if(p[i+1] != 0) cout  &lt;&lt; p[i+1] &lt;&lt; " ";
+        else cout &lt;&lt; "-1 ";
     }
 }
             </code></pre>
@@ -98,15 +98,15 @@ int main(void){
             <h3 id="C" class="prob">C - Count Close Pairs  <div class ="text-small">(17:15 1x)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int n; cin >> n;
+    int n; cin &gt;&gt; n;
 
     ll ans = 0;
     int l=1,r=2;
 
     while(true){
-        cout << "? " << l << " " << r << endl;
+        cout &lt;&lt; "? " &lt;&lt; l &lt;&lt; " " &lt;&lt; r &lt;&lt; endl;
         string ret;
-        cin >> ret;
+        cin &gt;&gt; ret;
 
         if(ret == "Yes"){
             r++;
@@ -124,7 +124,7 @@ int main(void){
         }
     }
 
-    cout << "! " << ans << endl;
+    cout &lt;&lt; "! " &lt;&lt; ans &lt;&lt; endl;
 }
             </code></pre>
             <p>
@@ -140,12 +140,12 @@ int main(void){
             <h3 id="D" class="prob">D - Placing Rooks <div class ="text-small">(21'46)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int n, m;cin >> n>> m;
+    int n, m;cin &gt;&gt; n&gt;&gt; m;
     int i;
 
-    vector<int> x(n,-1), y(n,-1);
+    vector&lt;int&gt; x(n,-1), y(n,-1);
     rep(i,m){
-        int r, c; cin >> r >> c;
+        int r, c; cin &gt;&gt; r &gt;&gt; c;
         r--;c--;
         if(x[r] != -1){
             y[x[r]] = -1;
@@ -162,7 +162,7 @@ int main(void){
     rep(i,n){
         if(x[i] != -1) ans++;
     }
-    cout << ans;
+    cout &lt;&lt; ans;
 }
             </code></pre>
             <p>
@@ -173,13 +173,13 @@ int main(void){
             <h3 id="E" class="prob">E - Range Flip <div class ="text-small">(46'15)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int n, k; cin >> n >> k;
+    int n, k; cin &gt;&gt; n &gt;&gt; k;
 
-    vector<pair<ll,ll>> a(n);
+    vector&lt;pair&lt;ll,ll&gt;&gt; a(n);
     int i;
-    rep(i,n) cin >> a[i].first >> a[i].second;
+    rep(i,n) cin &gt;&gt; a[i].first &gt;&gt; a[i].second;
 
-    vector<vector<ll>> dp(n+1, vector<ll>(k+1,0));
+    vector&lt;vector&lt;ll&gt;&gt; dp(n+1, vector&lt;ll&gt;(k+1,0));
 
     ll x=0, y=0;
     int j; i=0;
@@ -208,7 +208,7 @@ int main(void){
     rep(i,n){
         ans = max(ans + a[i].first, dp[i+1][k-1]);
     }
-    cout << ans;
+    cout &lt;&lt; ans;
 
 } 
             </code></pre>
@@ -222,37 +222,37 @@ int main(void){
             <h3 id="F" class="prob">F - Many Mod Calculation <div class ="text-small">(92'02)</div></h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int t; cin >> t;
+    int t; cin &gt;&gt; t;
     for(;t--;){
         ll n, x; 
-        cin >> n >> x;
-        vector<ll> a(n);
+        cin &gt;&gt; n &gt;&gt; x;
+        vector&lt;ll&gt; a(n);
         int i;
-        rep(i,n) cin >> a[i];
-        vector<ll> b; b.reserve(n);
+        rep(i,n) cin &gt;&gt; a[i];
+        vector&lt;ll&gt; b; b.reserve(n);
         b.push_back(x+1);
 
         rep(i,n){
-            if(b.empty() || (*b.rbegin()) > a[i]){
+            if(b.empty() || (*b.rbegin()) &gt; a[i]){
                 b.push_back(a[i]);
             } 
         }
         n = b.size();
         
-        vector<ll> ans(n+1,0);
+        vector&lt;ll&gt; ans(n+1,0);
         ans[n] = 1;
         rep(i,n-1){
-            ll x = b[n-i-1], y = b[n-i-2]; //y>x;
+            ll x = b[n-i-1], y = b[n-i-2]; //y&gt;x;
             if(i==0){
                 ans[n-i-1] += (y-1)/x +1;
             }else{
                 ans[n-i-1] += ((y-1)/x ) * (ans[n-i]);
                 ll rem = y%x;
-                while(rem>0){
+                while(rem&gt;0){
                     int l = n-i-1, r = n; // l ng / r ok
-                    while(r-l > 1){
+                    while(r-l &gt; 1){
                         int m = (r+l)/2;
-                        if(rem >= b[m]) r = m;
+                        if(rem &gt;= b[m]) r = m;
                         else l = m;
                     }
                     if(r == n) {ans[n-i-1]++; break;}
@@ -262,7 +262,7 @@ int main(void){
             }
 
         }
-        cout << ans[1]-1 << "\n";
+        cout &lt;&lt; ans[1]-1 &lt;&lt; "\n";
 
 
     }
