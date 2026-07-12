@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>日記-20260712 - kuronosu1024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> <!--上と二つ合わせてc++コードのエディタ風表示用-->
+
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><!--latexみたいに数式を書く用-->
+
+    <style>
+    </style>
+    
+</head>
+<body>
+    
+<div class="container">
+    <header>
+        日記 - 20260712 (ARC224) (ARC--)
+    </header>
+</div>
+
+<div class="container">
+    <main>
+        <section id="diary">
+            <h2>雑記</h2>
+            <p>
+                この土日マジでまともに勉強してなくないですか？いつも通りじゃまずくないですか？<br>
+                いや、今からやる（たぶん）<br>
+                <div class="text-small">現在時刻23:08...</div>
+            </p>
+        </section>
+        <section id="ARC">
+            <h2><a href="https://atcoder.jp/contests/arc224">ARC--224</a>参加記の部分</h2>
+            <p>
+                
+                F解きたかったな～　解けてたら入青だったな～～<br>
+                赤コーダーの皆さんはさも当然かのように数十分で全完しないでください　心臓に悪いです<br>
+
+            </p>
+            <p class="text-small">
+                とはいえ青中位perf,最近なんで調子いいんだ？ テストないから？
+            </p>
+            <p>
+                <a href="https://atcoder.jp/contests/arc224/submissions?f.Task=&f.LanguageName=&f.Status=&f.User=kuronosu1024">今回の提出一覧</a>
+            </p>
+
+            <h3 id="A" class="prob">
+                <a href="https://atcoder.jp/contests/arc224/tasks/arc224_a">
+                    A - Attach 00
+                </a>
+                <div class ="text-small">(04'07)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+bool ch(ll x){
+    bool p=false, q=false;
+
+    while(x!=0){
+        if(x%10 == 0){
+            if(p){q=true; break;}
+            else p=true;
+        }else{
+            p=false;
+        }
+        x/=10;
+    }
+    return q;
+}
+
+int main(void){
+    int t; cin &gt;&gt; t;
+    for(;t--;){
+        ll k; cin &gt;&gt; k;
+        ll b = k;
+        while(true){
+            if(ch(b)) { cout &lt;&lt; b &lt;&lt; "\n"; break;}
+            b+=k;
+        }
+    }
+} 
+            </code></pre>
+            <p>
+                100倍が必ず条件を満たすので、あり得る\(n\)は\(ak (a = 1,2,...100)\)の100通りしかなく、判定も\(O(\log n)\)でできるので、小さいほうから順に試していけばよい<br>
+            </p>
+
+            
+            <h3 id="B" class="prob">
+                <a href="https://atcoder.jp/contests/arc224/tasks/arc224_b">
+                    B - Adjacent Tiles 
+                </a>
+                <div class ="text-small">(17'02)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int t; cin &gt;&gt; t;
+    for(;t--;){
+        ll n; cin &gt;&gt; n;
+
+        ll l=0, r=n;
+        while(r-l&gt;1){
+            ll m = (r+l)/2;
+            if(n/m &gt;= m) l=m;
+            else r=m;
+        }
+
+        ll x = l;
+
+        ll ans = 0;
+
+        if(x==1) ans = 0;
+        else{
+            ans += 2*4;
+            ans += 3*(x-2)*4;
+            ans += 4*(x-2)*(x-2);
+        }
+
+        ll rem = n - x*x;
+        if(rem == 0);
+        else if(rem &lt;= x){
+            ans += rem;
+
+            if(rem == 1) ans += 1;
+            else{
+                ans += 2*2;
+                ans += 3*(rem-2);
+            }
+        }else{
+            ans += x;
+
+            if(x==1){
+                ans += 1;
+            }else{
+                ans += 2*2;
+                ans += 3*(x-2);
+            }
+            rem -= x;
+
+            ans += rem;
+
+            if(rem == 1) ans += 1;
+            else{
+                ans += 2*2;
+                ans += 3*(rem-2);
+            }
+        }
+
+        cout &lt;&lt; ans/2 &lt;&lt; "\n";
+    }
+} 
+            </code></pre>
+            <p>
+                全然未証明<br>
+                みんな爆速で通してったから、それっぽい奴投げたら通るか？って思って投げたら通った<br>
+
+                なるべく正方形にして、余りはいい感じに周りにくっつける<br>
+                <br>
+                この文章書いてる今になって証明思いついたわ<br>
+                ある\(n\)枚のタイル配置において、条件を満たすタイルのペアの個数を\(X\)、タイル配置の周長（内側の空白部分も含む）を\(Y\)とすると、
+                \(X*2 = N*4 - Y\)が言えて、このことより\(Y\)を最小化するべき<br>
+                内側の空白部分は明らかに無駄なので、そうしないことにすると、タイル配置が収まる最小の長方形が\(a\times b\)のとき、\(Y=2(a+b)\)である<br>
+                あとは\(ab\ge n\)なる\(a,b\)についての\(a+b\)の最小化問題で、これは、知っとるやろ（説明放棄）
+                <div class="text-small">実数の時は相加相乗でやるやつ　今回は自然数だから、ちょっとめんどい</div>
+            </p>
+
+            <h3 id="C" class="prob">
+                <a href="https://atcoder.jp/contests/arc224/tasks/arc224_c">
+                    C - Ascending Labels
+                </a>
+                <div class ="text-small">(36'18)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+void slv(vector&lt;vector&lt;int&gt;&gt; &amp;nb, vector&lt;int&gt; &amp;val, int x){
+    for(auto nx : nb[x]){
+        if(val[nx] == -2){
+            val[nx] = val[x]+1;
+            slv(nb,val,nx);
+        }
+    }
+    return;
+}
+
+int main(void){
+    int t; cin &gt;&gt; t;
+    for(;t--;){
+        int n,m; cin &gt;&gt; n &gt;&gt; m;
+        vector&lt;vector&lt;int&gt;&gt; nb(n);
+        vector&lt;int&gt; val(n,-2);
+        int i;
+        rep(i,m){
+            int u,v; cin &gt;&gt; u &gt;&gt; v;
+            u--;v--;
+            nb[u].push_back(v);
+            nb[v].push_back(u);
+        } 
+
+        val[0] = 0;
+        slv(nb,val,0);
+
+        rep(i,n) cout &lt;&lt; val[i] &lt;&lt; " ";
+        cout &lt;&lt; "\n";
+
+    }
+} 
+            </code></pre>
+            <p>
+                これまた未証明<br>
+                bfsだとうまくいかないが、dfsだとうまくいった<br>
+                <a href="https://atcoder.jp/contests/arc224/editorial/22368">解説</a>読んだ<br>
+                確かに<br>
+            </p>
+
+
+            <h3 id="D" class="prob">
+                <a href="https://atcoder.jp/contests/arc224/tasks/arc224_d">
+                    D - Angst for All Pairs
+                </a>
+                <div class ="text-small">(69'22 2x)</div>
+            </h3> 
+            
+            <pre><code class="language-cpp">
+ll pw(ll a, ll b){
+    ll ret = 1;
+    while(b&gt;0){
+        if(b&amp;1) ret *= a;
+        b&gt;&gt;=1;
+        a*=a;
+    }
+    return ret;
+}
+int main(void){
+    int t; cin &gt;&gt; t;
+    for(;t--;){
+        ll n,k;cin &gt;&gt;  n &gt;&gt; k;
+        if(n&lt;60 &amp;&amp; (1ll&lt;&lt;n) &lt; k) {cout &lt;&lt; "-1\n"; continue;}
+        vector&lt;int&gt; c(7,0); //c[i] -&gt; 書き込みにコストiが必要な値の数
+        ll K = k;
+        int i=0;
+        int j;
+        while(K&gt;0){
+            K/=10;
+            i++;
+        }
+        c[i] = k-pw(10,i-1);
+        rep(j,i){
+            if(j==0) continue;
+            c[j] = pw(10,j)-pw(10,j-1);
+        }
+
+        ll ans = 0;
+        j = 1;
+        ll cap = n, Cap = n;
+        while(true){
+            //j回書く数
+            if(cap &lt; c[i]){
+                ans += i*cap*j;
+                c[i]-=cap;
+
+                
+                Cap *= (n-j);
+                j++;
+                Cap /= j;
+                cap = Cap;
+            }else{
+                while(cap &gt;= c[i]){
+                    ans += i*c[i]*j;
+                    cap -= c[i];
+                    c[i] = 0;
+                    i--;
+                    if(i==0) break;
+                }
+                if(i==0) break;
+            }
+        }
+        cout &lt;&lt; ans &lt;&lt; "\n";
+    }
+} 
+            </code></pre>
+            <p>
+                まず、1～\(K\)のうちどれか一つは書かなくてもよいので、\(K\)は書かないことにする<Br>
+                書き入れる数字にそれぞれ\(n\)桁の2進数を対応させて、
+                それの\(k\)桁目が1の時に丁度カード\(k\)にその数字を書き入れるとすると、
+                どっちかのみが存在するカードが必ず1つ以上存在して、逆に、2進数の対応が間に合わないなら不可能<br>
+                あとは、コストが重い数字の書く量が少なくなるように割り当てればいい
+            </p>
+
+            <h3 id="E" class="prob">
+                <a href="https://atcoder.jp/contests/arc224/tasks/arc224_e">
+                    E - ABC|AB|A
+                </a>
+                <div class ="text-small">(81'29)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int t; cin &gt;&gt; t;
+    for(;t--;){
+        string s; cin &gt;&gt; s;
+        int n = s.size();
+        vector&lt;int&gt; v; v.reserve(n);
+        int i;
+
+        ll ans = n;
+        rep(i,n){
+            v.push_back(s[i]-'A');
+            bool b = true;
+            while(b){
+                int k = v.size();
+                b=false;
+                if (k &gt; 1){
+                    if(v[k-2] == 0 &amp;&amp; v[k-1] == 2){
+                        ans--;
+                        v.pop_back();
+                        v[k-2] = 2;
+                        b=true;
+                    }
+                    if(k &gt; 2){
+                        if(v[k-3] == 0 &amp;&amp; v[k-2] == 1 &amp;&amp; v[k-1] == 2){
+                            ans-=3;
+                            v.pop_back();
+                            v.pop_back();
+                            v.pop_back();
+                            b=true;
+                        }else if(v[k-3] == 0 &amp;&amp; v[k-2] == 1 &amp;&amp; v[k-1] == 1){
+                            ans-=2;
+                            v.pop_back();
+                            v.pop_back();
+                            v[k-3] = 1;
+                            b=true;
+                        }
+                    }
+                }
+            }
+            
+        }
+
+        int b = true;
+        while(b){
+            int k = v.size();
+            b=false;
+
+            if (k &gt; 0){
+                if(v[k-1] == 0){
+                    ans--;
+                    v.pop_back();
+                    b=true;
+                }
+                if(k &gt; 1){
+                    if(v[k-2] == 0 &amp;&amp; v[k-1] == 1){
+                        ans-=2;
+                        v.pop_back();
+                        v.pop_back();
+                        b=true;
+                    }else if(k&gt;2 &amp;&amp; v[k-3] == 0 &amp;&amp; v[k-2] == 1 &amp;&amp; v[k-1] == 2){
+                        ans-=3;
+                        v.pop_back();
+                        v.pop_back();
+                        v.pop_back();
+                        b=true;
+                    }
+                }
+            }
+
+        }
+        cout &lt;&lt; ans &lt;&lt; "\n";
+
+
+    }
+}
+            </code></pre>
+            <p>
+                部分文字列<code>"ABC"</code>,<code>"ABB"</code>,<code>"AC"</code>を見つけたらそれぞれ消せるだけ消していい<br>
+                ①<code>"ABC"</code>については、<code>BC</code>や<Code>C</Code>を残して消したことで新しく消せるようになる部分は存在しない、<code>AABC</code>, <code>ABABC</code>のように、順序が変わるだけだから<br>
+                ②<code>"ABB"</code>については、後ろの<code>B</code>が邪魔で新しく<code>C</code>が消せる位置に来ることはなく、また、<code>A</code>だけで消す意味も①と同様にない<br>
+                ③<code>"AC"</code>についても同様
+            </p>
+
+            <h3 id="F" class="prob">
+                <a href="https://atcoder.jp/contests/arc224/tasks/arc224_f">
+                    F - AND/OR
+                </a>
+                <div class ="text-small">(--'--)</div>
+            </h3> 
+            <p>
+                なにこれ   
+            </p>
+        </section>
+
+        <section>
+            <h2>駄文</h2>
+            <p>
+                今回問題名全部A始まりなのなんで？ そういう祭り？<br>
+                それはそれとして、<a href="https://x.com/SIAN_FKP_37">SIAN先生</a>の<a href="https://x.com/SIAN_FKP_37/status/2070165135172477160">ヤツデイズ｜</a>を読みました、初めて買った漫画雑誌の安さに感動したのと、マジで面白かった、よかった、やはりうすほそは正義
+            </p>
+        </section>
+
+    </main>
+
+    <aside>
+        <div class="sidebar">
+
+            <h3><a href="https://kuronosu1024.github.io/about/">メインページへ</a></h3><br>
+            <h3><a href="https://kuronosu1024.github.io/about/diary/top.html">雑記</a></h3>
+
+            <hr>
+            <h3> 目次</h3>
+
+            <ul>
+                <li><a href="#diary">雑記</a></li>
+                <li><a href="#ABC">ARC--224</a> </li>
+                <ul>
+                    <li><a href="#A">A</a></li>
+                    <li><a href="#B">B</a></li>
+                    <li><a href="#C">C</a></li>
+                    <li><a href="#D">D</a></li>
+                    <li><a href="#E">E</a></li>
+                    <li><a href="#F">F</a></li>
+                </ul>
+            </ul>
+
+            <hr>
+
+            <a href="#">一番上へ</a><br>
+
+        </div>
+        
+    </aside>
+
+</div>
+<script> hljs.highlightAll(); </script>
+
+<footer>
+    © 2026 kuronosu1024
+</footer>
+
+</body>
+</html>
