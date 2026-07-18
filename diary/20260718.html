@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>週記-20260718 - kuronosu1024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> <!--上と二つ合わせてc++コードのエディタ風表示用-->
+
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><!--latexみたいに数式を書く用-->
+
+    <style>
+    </style>
+    
+</head>
+<body>
+    
+<div class="container">
+    <header>
+        週記 - 20260718 (ABC467)
+    </header>
+</div>
+
+<div class="container">
+    <main>
+        <section id="diary">
+            <h2>雑記</h2>
+            <p>
+                エンドフィールド
+            </p>
+        </section>
+        <section id="ABC">
+            <h2><a href="https://atcoder.jp/contests/abc467">ABC467</a>参加記の部分</h2>
+            <p>
+                
+                D飛ばし4完<br>
+                数学でこれまでとってたのに数学に殺された～<br>
+                とはいえ勝ちストリーク継続、過去最長タイで嬉しみ
+
+            </p>
+            <p class="text-small">
+                もう一つの最長ストリークは始めたての頃なので実質今が最長
+            </p>
+            <p>
+                <a href="https://atcoder.jp/contests/abc467/submissions?f.Task=&f.LanguageName=&f.Status=&f.User=kuronosu1024">今回の提出一覧</a>
+            </p>
+
+            <h3 id="A" class="prob">
+                <a href="https://atcoder.jp/contests/abc467/tasks/abc467_a">
+                    A - Obesity
+                </a>
+                <div class ="text-small">(4'33)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int h, w; cin &gt;&gt; h &gt;&gt; w;
+    if(w* 10000 &gt;= 25 * h * h){
+        cout &lt;&lt; "Yes\n";
+    }else{
+        cout &lt;&lt; "No\n";
+    }
+} 
+            </code></pre>
+            <p>
+                身長が\([m]\)で与えられると思ってコード組んでたから
+                世界/私どっちか壊れてるみたいと思ってたけど全然おれ<br>
+            </p>
+
+            
+            <h3 id="B" class="prob">
+                <a href="https://atcoder.jp/contests/abc467/tasks/abc467_b">
+                    B - Keep the Change
+                </a>
+                <div class ="text-small">(04'54)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin &gt;&gt; n;
+
+    ll x=10000, y=10000;
+    for(;n--;){
+        ll a, b; cin &gt;&gt; a &gt;&gt; b;
+        string s; cin &gt;&gt; s;
+        if(s == "keep"){
+            x -= b;
+            y -= a;
+        }else{
+            x-= a;
+            y-=a;
+        }
+    }
+    cout &lt;&lt; y - x; 
+}
+            </code></pre>
+            <p>
+                そのままシミュレーションする以外にすることがない（別に最初から差分でとってもいいけど計算量変わらない）
+            </p>
+
+            <h3 id="C" class="prob">
+                <a href="https://atcoder.jp/contests/abc467/tasks/abc467_c">
+                    C - Adjacent Sums (easy)
+                </a>
+                <div class ="text-small">(57:41 1x)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n, m; cin &gt;&gt; n &gt;&gt; m;
+    vector&lt;int&gt; a(n), b(n-1);
+    int i;
+    rep(i,n) cin &gt;&gt; a[i];
+    rep(i,n-1) cin &gt;&gt; b[i];
+
+    auto c = a;
+
+    ll ans1 = 0;
+    rep(i,n-1){
+        if((a[i]+a[i+1])%2 != b[i]){
+            a[i+1]++;
+            ans1++;
+        }
+    }
+    ll ans2 = 1; c[0]++;
+    rep(i,n-1){
+        if((c[i]+c[i+1])%2 != b[i]){
+            c[i+1]++;
+            ans2++;
+        }
+    }
+    
+    cout &lt;&lt; min(ans1, ans2);
+}
+            </code></pre>
+            <p>
+                最初適当に貪欲してペナ食らった　適当でいいわけないです<br>
+                とはいえ\(M=2\)なので、下記より二回貪欲すると答えを出せる<br>
+                <br>
+                操作後の数列を\(tg\)とすると、\(tg[0]\)を何かしら決めたとき、<br>
+                \(tg[n] \equiv  b[n-1] - tg[n-1]\)<br>
+                より\(tg\)を全部決めれる<br>
+                (操作回数を最小にしたいので、\(tg[n]\)はこれと、\(tg[n] \ge a[n]\)を満たす最小のものを選ぶ)<br>
+                \(\mod 2\)をとるので、（\(a[0] + 2\)は\(a[0]\)の下位互換だから、）あり得る\(tg[0]\)は\(a[0]\)と\(a[0]+1\)の2通りしかないので、この二つを試せば十分
+
+            </p>
+
+
+            <h3 id="D" class="prob">
+                <a href="https://atcoder.jp/contests/abc467/tasks/abc467_d">
+                    D - Concentric Circles
+                </a>
+                <div class ="text-small">(--'-- 4x)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+(間違ってる上に長くて読みにくく恥の要素しかないので割愛)
+            </code></pre>
+            <p>
+                <h1 style="color: red; font-family: 'DotGothic16', monospace;">直線の一般式は\(y=ax+b\)ではない</h1>
+                過去に数学のテストで同じミスをして点数を失ったというのにこの体たらく、失敗から学びなさい<br>
+                <br>
+                二線の平行を調べて、そのあとは中点の傾きを調べると楽と分かってたのに、また別の実装ミスでペナって（ダメか？）って思って愚直に直線の方程式を立てて一致するか調べに行って、醜態を晒した<br>
+
+            </p>
+
+            <h3 id="E" class="prob">
+                <a href="https://atcoder.jp/contests/abc467/tasks/abc467_e">
+                    E - Adjacent Sums (hard)
+                </a>
+                <div class ="text-small">(95'40)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    ll n, m; cin &gt;&gt; n &gt;&gt; m;
+
+    vector&lt;ll&gt; a(n), b(n-1), nb(n-1), ax(n-1);
+    int i;
+    rep(i,n){
+        cin &gt;&gt; a[i];
+    }
+    rep(i,n-1){
+        ax[i] = a[i] + a[i+1];
+        ax[i] %= m;
+    }
+    rep(i,n-1) cin &gt;&gt; b[i];
+
+    rep(i,n-1){
+        nb[i] = b[i] - ax[i];
+        while(nb[i] &lt; 0) nb[i] += m;
+    }
+
+    vector&lt;ll&gt; c(n);
+
+    c[0] = 0;
+    rep(i,n-1){
+        c[i+1] = nb[i] - c[i];
+        while(c[i+1] &lt; 0) c[i+1] += m;
+    }
+
+    vector&lt;pair&lt;int,ll&gt;&gt; e;
+    // pe.reserve(n/2); me.reserve((n+1)/2);
+    e.reserve(n);
+
+    rep(i,n){
+        if(i&amp;1){//me
+            e.push_back(make_pair(m, c[i] + 1));
+           
+        }else{
+
+            // me.push_back(m-c[i]); // m-c[i] で -mイベント;
+            // pe.push_back(c[i]+1); //c[i]+1 で +mイベント;
+             e.push_back(make_pair(-m, m-c[i]));
+        }
+    }
+    sort(all(e), [&](pair&lt;int,ll&gt; a, pair&lt;int,ll&gt; b){
+        if(a.second != b.second) return a.second &lt; b.second;
+        else return a.first &lt; b.first;
+    });
+
+    int j =0;
+    ll ans = 0;
+    rep(i,n){
+        ans += c[i];
+    }
+    
+    ll na = ans;
+
+    ll t = 0;
+    i=0;
+
+    while(i&lt;n){
+        ll nt = e[i].second;
+        while(e[i].second == nt){
+            na += e[i].first;
+            i++;
+            if(i==n) break;
+        }
+
+        na += (n%2==1 ? nt-t : 0);
+        t = nt;
+
+        if(ans &gt; na) ans = na;
+
+    }
+    cout  &lt;&lt; ans;
+
+}
+            </code></pre>
+            <p>
+                Cと同様の議論でまずは\(M\)通りに\(tg\)を絞れる<br>
+                \(M\)通りのうち\(tg[0]\)の操作回数が\(0\)のものについての第\(i\)項の操作回数を\(c[i]\)とすると、<br>
+                操作回数が\(x\)の時の第\(i\)項の操作回数\(d_x[i]\)は<br>
+                \(d_x[i]= (c[i] + (-1)^i x )\mod M \) と求められる<a class="text-small">(iは0indexed)</a> <br>
+                （a[0]を一回多く操作したなら、条件を達成するためにa[1]の操作数を1回減らす必要がある...といった感じで）<br>
+                そしたら、一旦\(\mod M\)を無視すると<br>
+                \(\sum_{i=0}^N d_x[i] = \sum_{i=0}^N c[i] +0\) (\(N\)が偶数の時) <br>
+                \(\sum_{i=0}^N d_x[i] = \sum_{i=0}^N c[i] +x\) (\(N\)が奇数の時) <br>
+                となって、modを取ることによる変動は、各\(i\)で<br>
+                \(c[i]+x \ge M\)なる\(x\)で\(-M\) (\(i\)が偶数の時)<br>
+                \(c[i]-x \lt 0\) なる\(x\)で\(+M\) (\(i\)が奇数の時)<br>
+                で、基本的に\(x\)を増やすことは損なのでこの変動があるタイミングだけ気にするとよい<br>
+                \(|c|=N\)なので、\(O(N)\)で求められます
+            </p>
+
+            <h3> </h3>
+            今回FG見る余裕なかった、E通ってあぶね～～～って感じだったから
+ 
+        <section>
+            <h2>駄文</h2>
+            <p>
+                ライブラリ生やしたい欲++（Dで有理数が欲しくなったので）
+            </p>
+        </section>
+
+    </main>
+
+    <aside>
+        <div class="sidebar">
+
+            <h3><a href="https://kuronosu1024.github.io/about/">メインページへ</a></h3><br>
+            <h3><a href="https://kuronosu1024.github.io/about/diary/top.html">雑記</a></h3>
+
+            <hr>
+            <h3> 目次</h3>
+
+            <ul>
+                <li><a href="#diary">雑記</a></li>
+                <li><a href="#ABC">ABC467</a> </li>
+                <ul>
+                    <li><a href="#A">A</a></li>
+                    <li><a href="#B">B</a></li>
+                    <li><a href="#C">C</a></li>
+                    <li><a href="#D">D</a></li>
+                    <li><a href="#E">E</a></li>
+                </ul>
+            </ul>
+
+            <hr>
+
+            <a href="#">一番上へ</a><br>
+
+        </div>
+        
+    </aside>
+
+</div>
+<script> hljs.highlightAll(); </script>
+
+<footer>
+    © 2026 kuronosu1024
+</footer>
+
+</body>
+</html>
