@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>週記-20260725 - kuronosu1024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> <!--上と二つ合わせてc++コードのエディタ風表示用-->
+
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><!--latexみたいに数式を書く用-->
+
+    <style>
+    </style>
+    
+</head>
+<body>
+    
+<div class="container">
+    <header>
+        週記 - 20260725 (ABC468)
+    </header>
+</div>
+
+<div class="container">
+    <main>
+        <section id="diary">
+            <h2>雑記</h2>
+            <p>
+                何も考えずに週記って名目でこれ書いてるけどあのこたつがめ大先輩も週記やってたんですね<br>
+                嬉しい
+            </p>
+        </section>
+        <section id="ABC">
+            <h2><a href="https://atcoder.jp/contests/abc468">ABC468</a>参加記の部分</h2>
+            <p>
+                
+                5完水perfレート減少勝ちストローク終了気分後退猫吸い気分上昇
+
+            </p>
+            <p>
+                <a href="https://atcoder.jp/contests/abc468/submissions?f.Task=&f.LanguageName=&f.Status=&f.User=kuronosu1024">今回の提出一覧</a>
+            </p>
+
+            <h3 id="A" class="prob">
+                <a href="https://atcoder.jp/contests/abc468/tasks/abc468_a">
+                    A - Maximal Value
+                </a>
+                <div class ="text-small">(2'36)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    
+    int n; cin &gt;&gt; n;
+
+    vector&lt;int&gt; a(n);
+    int i;
+    rep(i,n) cin &gt;&gt; a[i];
+
+    int ans = 0;
+    for(int j=1; j&lt;n-1; j++){
+        if(a[j-1] &lt; a[j] &amp;&amp; a[j] &gt; a[j+1]) {
+            ans++;
+        }
+    }
+
+    cout &lt;&lt; ans;
+    
+}
+            </code></pre>
+            <p>
+                &lt; &lt;だと思ってたけど全然&lt; &gt;だった<br>
+            </p>
+
+            
+            <h3 id="B" class="prob">
+                <a href="https://atcoder.jp/contests/abc468/tasks/abc468_b">
+                    B - Corridor Watch
+                </a>
+                <div class ="text-small">(10'12 1x)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int m, d; cin &gt;&gt; m &gt;&gt; d;
+
+    string s; cin &gt;&gt; s;
+
+    int i;
+    
+    int t = 0;
+
+    rep(i,m){
+        if(i-d&lt; 0) {
+            if(s[i] == 'G'){
+                t = (d+1 + i);
+                continue;
+            }
+        }
+        if(s[i] == 'G') s[i-d] = 'U';
+    }
+
+    int ans = 0;
+    rep(i,m){
+        if(s[i] == 'U'){
+            t = 2*d+1;
+        }
+        if(t&lt;=0) ans++;
+
+        t--;
+    }
+    
+    cout &lt;&lt; ans &lt;&lt; "\n";
+}
+            </code></pre>
+            <p>
+                最初に<del>楽天</del>ガードマンの視界の左端を決定すると解きやすい？知らないけどそうした<br>
+                実装ミスでペナしてもったいない<br>
+                とてももったいない    
+            </p>
+
+            <h3 id="C" class="prob">
+                <a href="https://atcoder.jp/contests/abc468/tasks/abc468_c">
+                    C - Between P and Q
+                </a>
+                <div class ="text-small">(21'13)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin &gt;&gt; n;
+
+
+    vector&lt;int&gt; a(n);
+    int i;
+    rep(i,n) a[i] = i;
+    
+    vector&lt;int&gt; p(n), q(n);
+    rep(i,n) cin &gt;&gt; p[i];
+    rep(i,n) cin &gt;&gt; q[i];
+
+    rep(i,n){ p[i]--; q[i]--;}
+
+    bool st = false;
+    bool ed = false;
+    int ans = 0;
+    do{
+        if(a == q) ed = true;
+        if(st &amp;&amp; !ed) ans++;
+        
+        if(a == p) st = true;
+    }while( next_permutation(all(a)));
+    cout &lt;&lt; ans;
+}
+            </code></pre>
+            <p>
+                \(N=10\)って\(O(N\cdot N!)\)が通るのか・・・という気持ち<br>
+                計算量の見積もりがへたくそ<br>
+                \(N\cdot N! = 36288000\)で、億超えるからダメそうだとか思っていたが、今見たら全然億超えてなくてウケる
+            </p>
+
+
+            <h3 id="D" class="prob">
+                <a href="https://atcoder.jp/contests/abc468/tasks/abc468_d">
+                    D - Pre-Palindrome
+                </a>
+                <div class ="text-small">(24'15)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    string s; cin &gt;&gt; s;
+
+    int n = s.size();
+
+    int i,j;
+    ll ans = 0;
+    rep(i,n){
+        int c = 0;
+        ans++;
+        rep(j,min(i,n-i-1)){
+            if(s[i-j-1] != s[i+j+1]) c++;
+            if(c&gt;1) break;
+            ans++;
+        }
+    }
+    rep(i,n-1){
+        int c=0;
+        rep(j,min(i+1,n-i-1)){
+            if(s[i-j] != s[i+j+1]) c++;
+            if(c&gt;1) break;
+            ans++;
+        }
+    }
+
+    cout &lt;&lt; ans;
+}
+            </code></pre>
+            <p>
+                回文は中心を決定すると、それより2長い次の文字列の判定が\(O(1)\)になってよい<br>
+                今回はそれで\(O(N^2)\)かかって、\(N^2 = 10^8\)で億いったから厳しいかなとか思ってたけど、
+                定数倍が軽いし、全然余裕で通る(21ms)
+            </p>
+
+            <h3 id="E" class="prob">
+                <a href="https://atcoder.jp/contests/abc468/tasks/abc468_e">
+                    E - Sum of Average
+                </a>
+                <div class ="text-small">(46'02)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+using namespace nskr;
+using mint = modint&lt;0&gt;;
+int main(void){
+    int n; cin &gt;&gt; n;
+    vector&lt;int&gt; a(n);
+    int i;
+    rep(i,n) cin &gt;&gt; a[i];
+
+    mint dum; //dum.set_mod(998244353);
+
+    mint ans = 0;
+    mint t=0,s=0;
+    rep(i,n){
+        t += mint(1)/mint(i+1);
+    }
+    s=t;
+
+    vector&lt;mint&gt; u(n);
+    rep(i,n){
+        if(i == n-i-1){
+            u[i] = s;
+        }else if(i &gt; n-i-1) break;
+        else{
+            u[i] = s;
+            u[n-i-1] = s;
+
+            t -= mint(1)/mint(i+1);
+            t -= mint(1)/mint(n-i);
+            s += t;
+        }
+    }
+
+    rep(i,n){
+        ans += u[i]*a[i];
+    }
+    cout &lt;&lt; ans &lt;&lt; "\n";  
+
+    
+}
+            </code></pre>
+            <p>
+                数列にかける係数は、例えばN=7で<br>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>1/7</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1コ</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>1/6</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>1コ</td>
+                        </tr>
+                        
+                        
+                        <tr>
+                            <td>1/5</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>1コ</td>
+                        </tr>
+
+                        
+                        <tr>
+                            <td>1/4</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>1コ</td>
+                        </tr>
+
+                        
+                        <tr>
+                            <td>1/3</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>1コ</td>
+                        </tr>
+
+                        
+                        <tr>
+                            <td>1/2</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>1コ</td>
+                        </tr>
+
+                        
+                        <tr>
+                            <td>1/1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1コ</td>
+                        </tr>
+
+                        <tr>
+                            <td>sum... </td>
+                            <td>13068/7!</td>
+                            <td>20376/7!</td>
+                            <td>24324/7!</td>
+                            <td>25584/7!</td>
+                            <td>24324/7!</td>
+                            <td>20376/7!</td>
+                            <td>13068/7!</td>
+                        </tr>
+                </table>
+            </p>
+            のsumの部分<br>
+            これをかけて総和とればOK
+            
+            
+            <h3 id="F" class="prob">
+                <a href="https://atcoder.jp/contests/abc468/tasks/abc468_d">
+                    F - Chmax
+                </a>
+                <div class ="text-small">(--'-- 2x)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+//注意 WAを出すコードです　まず論理が間違ってます
+int main(void){
+    int n; cin &gt;&gt; n;
+    vector&lt;ll&gt; a(n);
+    int i;
+    rep(i,n) cin &gt;&gt; a[i];
+
+    segtree&lt;ll, op, e&gt; u(n+1);
+    vector&lt;int&gt; c(n+1,0);
+    rep(i,n+1) u.set(i,-1);
+    u.set(0,1ll&lt;&lt;30);
+    rep(i,n){
+        int l=0, r=n;
+        while(r-l &gt; 1){
+            int m = (r+l)/2;
+            if(u.prod(0,m) &gt; a[i]) l = m;
+            else r = m;
+        }
+
+        u.set(l, a[i]); 
+        c[r]++;
+    }
+
+    vector&lt;ll&gt; b(n+1,0);
+    rep(i,n){
+        if(c[i]&gt;0) b[c[i]]++;
+    }
+
+
+    rep(i,n){
+        b[n-i-1]+=b[n-i];
+    }
+    
+    ll ans = 0;
+    rep(i,n){
+        if(b[i]&gt;0){
+            if(i!=0){
+                ans+= min(2ll,b[i]);
+            }   
+        }else{
+            break;
+        }
+    }
+    cout &lt;&lt; ans &lt;&lt; "\n";
+}
+            </code></pre>
+            <p>
+                LISだと思った<br>
+                LISじゃなかった<Br>
+                操作は必ずどちらかをしなければならないので、例えば<br>
+                \(\{9, 2, 4, 6, 8, 1, 3, 5, 7\}\)で間違った答え\(8\)を出力する<br>
+                正しくは\(5\)なのに
+            </p>
+
+        </section>
+        <section>
+            <h2>駄文</h2>
+            <p>
+                運動会の準備が怠いんじゃ～～～<br>
+                周囲の人間がパソコン大好きな環境で育ったせいで、パソコンに疎い人間の扱いに疎い<br>
+                <br>
+                あと、ホロドリってやつ<br>
+                ホロライブのライバーの皆さんは、大ファンとまではいかないけど（特に歌みたを）見ることはたまによくあるのでインストールした<br>
+                音ゲーが下手です<br>
+                想像以上にすごい凝ったゲームで、ストーリの会話部分のLive2Dによる暴力がえぐい<br>活き活きとしすぎている<br>
+                FlowGlowがいなくてちょっと残念だったけど（制作時期の都合でいないらしい）<br>
+                <br>
+                デコグラデーション入ってくれたら尚うれしいな～～
+            </p>
+        </section>
+
+    </main>
+
+    <aside>
+        <div class="sidebar">
+
+            <h3><a href="https://kuronosu1024.github.io/about/">メインページへ</a></h3><br>
+            <h3><a href="https://kuronosu1024.github.io/about/diary/top.html">雑記</a></h3>
+
+            <hr>
+            <h3> 目次</h3>
+
+            <ul>
+                <li><a href="#diary">雑記</a></li>
+                <li><a href="#ABC">ABC468</a> </li>
+                <ul>
+                    <li><a href="#A">A</a></li>
+                    <li><a href="#B">B</a></li>
+                    <li><a href="#C">C</a></li>
+                    <li><a href="#D">D</a></li>
+                    <li><a href="#E">E</a></li>
+                    <li><a href="#F">F</a></li>
+                </ul>
+            </ul>
+
+            <hr>
+
+            <a href="#">一番上へ</a><br>
+
+        </div>
+        
+    </aside>
+
+</div>
+<script> hljs.highlightAll(); </script>
+
+<footer>
+    © 2026 kuronosu1024
+</footer>
+
+</body>
+</html>
