@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>週記-20260808 - kuronosu1024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> <!--上と二つ合わせてc++コードのエディタ風表示用-->
+
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><!--latexみたいに数式を書く用-->
+
+    <style>
+    </style>
+    
+</head>
+<body>
+    
+<div class="container">
+    <header>
+        週記 - 20260808 (ABC470)
+    </header>
+</div>
+
+<div class="container">
+    <main>
+        <section id="diary">
+            <h2>雑記</h2>
+            <p>
+                最近の睡眠のサイクルは32時間 (睡眠:起床 = 12:20)
+            </p>
+        </section>
+        <section id="ABC">
+            <h2><a href="https://atcoder.jp/contests/abc470">ABC470</a>参加記の部分</h2>
+            <p>
+                
+                とんでもない大窃盗をかましなんと黄perf&入青（そのうち入青記事（日記？）が生えます）
+
+            </p>
+            <p>
+                <a href="https://atcoder.jp/contests/abc470/submissions?f.Task=&f.LanguageName=&f.Status=&f.User=kuronosu1024">今回の提出一覧</a>
+            </p>
+
+            <h3 id="A" class="prob">
+                <a href="https://atcoder.jp/contests/abc470/tasks/abc470_a">
+                    A - Fizz
+                </a>
+                <div class ="text-small">(1'52)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin &gt;&gt; n;
+
+    for(int i=1; i&lt;=n;i++){
+        if(i%3==0) cout &lt;&lt; "Fizz\n";
+        else cout &lt;&lt; i  &lt;&lt; "\n";
+    }
+}
+            </code></pre>
+            <p>
+                fizz buzz (buzz抜き)←なんでだよbuzzも入れてあげろよbuzzがかわいそうだろ
+            </p>
+
+            
+            <h3 id="B" class="prob">
+                <a href="https://atcoder.jp/contests/abc470/tasks/abc470_b">
+                    B - Monocolor
+                </a>
+                <div class ="text-small">(5'05)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin &gt;&gt; n;
+    map&lt;int,int&gt; c;
+    int i;
+    rep(i,n){
+        int u; cin &gt;&gt; u;
+        c[u]++;
+    }
+    int ans = n;
+    for(auto [a,b] : c){
+        if(ans &gt; n-b) ans = n-b;
+    }
+    cout &lt;&lt; ans &lt;&lt; "\n";
+}
+            </code></pre>
+            <p>
+                一番多い色に合わせてやると最小になる<br>
+                各色に対して操作数を求めて最小を求めてもよい（そうした）<br>   
+            </p>
+
+            <h3 id="D" class="prob">
+                <a href="https://atcoder.jp/contests/abc470/tasks/abc470_d">
+                    D - Inverse and Swap
+                </a>
+                <div class ="text-small">(16'34)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n, u; cin &gt;&gt; n &gt;&gt; u;
+    vector&lt;int&gt; p(n), q(n);
+    int i;rep(i,n) cin &gt;&gt; p[i];
+    rep(i,n) p[i]--;
+    rep(i,n) q[p[i]] = i;
+    bool b = true;
+    for(;u--;){
+        int r; cin &gt;&gt; r;
+        if(r==1){
+            int x,y; cin &gt;&gt; x &gt;&gt; y;
+            x--;y--;
+            if(b){
+                swap(p[x], p[y]);
+                q[p[x]] = x;
+                q[p[y]] = y;
+            }else{
+                swap(q[x], q[y]);
+                p[q[x]] = x;
+                p[q[y]] = y;
+            }
+        }else{
+            b=!b;
+        }
+    }
+    if(b){
+        rep(i,n) cout &lt;&lt; p[i]+1 &lt;&lt; " ";
+    }else{
+        rep(i,n) cout &lt;&lt; q[i]+1 &lt;&lt; " "; 
+    }
+
+}
+            </code></pre>
+            <p>
+                Cはぱっと見無理だったので先にDをやった<br>
+                先にinvを計算しておくとタイプ2のクエリが楽な上にタイプ1も大して計算量が増えない<br>
+                \( inv(inv(S)) = S \) を意識すると割と見える解法？
+            </p>
+
+
+            <h3 id="F" class="prob">
+                <a href="https://atcoder.jp/contests/abc470/tasks/abc470_f">
+                    F - Googol Swaps
+                </a>
+                <div class ="text-small">(42'59)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n, m; cin &gt;&gt; n &gt;&gt; m;
+    string s;
+    cin &gt;&gt; s;
+    int i;
+    vector&lt;vector&lt;int&gt;&gt; nb(n);
+    unionfind uf(n);
+    rep(i,m){
+        int u,v; cin &gt;&gt; u &gt;&gt; v; u--; v--;
+        nb[u].push_back(v);
+        nb[v].push_back(u);
+        uf.merge(u,v);
+    }
+    vector&lt;map&lt;char,int&gt;&gt; v(n);
+    vector&lt;int&gt; r;
+    rep(i,n){
+        if(uf.find(i)==i){
+            r.push_back(i);
+        }
+        v[ uf.find(i) ][ s[i] ]++;
+    }
+
+    bool t = true;
+
+    mint ans = 1;
+    combination&lt;mint&gt; comb; comb.preculc(n);
+    rep(i, r.size() ){
+        ll sm = 0;
+        for(auto [c,x] : v[r[i]]){
+            if(x&gt;1) t=false;
+            sm += x;
+            ans /= comb.fac[x];
+        }
+        ans *= comb.fac[sm];
+    }
+    if(t) ans /= mint(2);
+    cout &lt;&lt; ans.val() &lt;&lt; "\n";
+    
+
+
+    
+}
+            </code></pre>
+            <p>
+                Eがぱっと見無理そうだったので、先にFを解いた<br>
+                今回の \(10^{100}\) は無限じゃなくてどちらかといえば \(2^{\infty}\) <br>
+                <br>
+                <code>swap(a,b)</code> を \(n\) 頂点の無向グラフ \(G\) の頂点a,b間の辺と捉えると見通しがよい<br>
+                一旦 \(10^{100}\) までの自由な回数swapしてよいことにすると、\(G\) で連結な頂点を自由に並び替えられる（バブルソートの要領で）<br>
+                →この答えは各連結成分で重複順列の個数を数えた総積になる<br><br>
+
+                元の丁度 \(10^{100}\) 回に戻すと、全ての連結成分において重複がなかった時に2倍ずれる<br>
+                <br>
+                総操作回数は実質 \(2^{\infty}\) で、この時操作後の文字列の転倒数の偶奇は操作前と等しくなるので、そうならないような文字列を含めてはならない<br>
+                →転倒数が偶数の順列と奇数の順列は同じ数あります(1,2,3,4 → 2,3,1,4 みたいな感じで全単射の写像が作れるので)<br>
+            </p>
+
+            <h3 id="G" class="prob">
+                <a href="https://atcoder.jp/contests/abc470/tasks/abc470_g">
+                    G - Σex
+                </a>
+                <div class ="text-small">(64'01 1x)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+using ll = long long;
+#define FOR(i,n) for(i=0;i&lt;n;i++)
+// https://kmjp.hatenablog.jp/entry/2021/06/29/0900 より　一部改変
+
+
+
+int N;
+int A[302020];
+set&lt;int&gt; S[302020];
+
+class AreaRect {
+	map&lt;ll,ll&gt; M;
+public:
+	ll sum;
+	AreaRect() {
+		M[0]=1LL&lt;&lt;60;
+		M[1LL&lt;&lt;60]=0;
+		sum=0;
+	}
+	void add(ll x,ll y) {
+		auto k=M.lower_bound(x);
+		if(k-&gt;second&gt;=y) return;
+		while(prev(M.lower_bound(x))-&gt;second&lt;=y) {
+			auto p=*prev(M.lower_bound(x));
+			M.erase(p.first);
+			sum-=(p.first-prev(M.lower_bound(p.first))-&gt;first)*(p.second-M.lower_bound(p.first)-&gt;second);
+		}
+		sum += (x-prev(M.lower_bound(x))-&gt;first)*(y-M.lower_bound(x)-&gt;second);
+		M[x]=y;
+	}
+};
+AreaRect ar;
+
+int main() {
+	int i,j,k,l,r,x,y; string s;
+	
+	cin&gt;&gt;N;
+	FOR(i,N) {
+		cin&gt;&gt;A[i];
+        A[i]++;
+		S[A[i]].insert(i+1);
+		S[i+1].insert(N+1);
+	}
+	for(i=1;i&lt;=N;i++) {
+		x=*S[i].begin();
+		ar.add(N+1-i,x);
+	}
+	ll ret=1LL*N*(N+1)/2;
+	FOR(i,N) {
+		ret+=1LL*N*(N+1)-ar.sum;
+		S[A[i]].erase(S[A[i]].begin());
+		x=*S[A[i]].begin();
+		ar.add(N+1-A[i],x);
+		
+	}
+		
+	cout&lt;&lt;ret - ((ll)N*((ll)N+1ll)/2) &lt;&lt;endl;
+}
+            </code></pre>
+            <p>
+                sum of mexで調べたら出てきた<a href="https://kmjp.hatenablog.jp/entry/2021/06/29/0900">https://kmjp.hatenablog.jp/entry/2021/06/29/0900</a>を丸ごと窃盗・・・<br>
+                問題文の微妙な差(0を含むか否か)を適当にいなしてなんと解かずにAC <br>
+                このコードが何をしているのかは知りません・・・（後で読みます）
+            </p>
+            
+            
+            <h3 id="C" class="prob">
+                <a href="https://atcoder.jp/contests/abc470/tasks/abc470_c">
+                    C - Inc, Dec, Xor
+                </a>
+                <div class ="text-small">(70'10)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n, q; cin &gt;&gt; n &gt;&gt; q;
+    vector&lt;int&gt; a(n,0);
+    set&lt;int&gt; p;
+    ll ans = 0;
+    int i;
+    for(;q--;){
+        int r,x; cin &gt;&gt; r;
+        if(r==1){
+            cin &gt;&gt; x; x--;
+            ans ^= a[x];
+            if(a[x] == 0){
+                p.insert(x);
+            }
+            a[x]++;
+            ans ^=a[x];
+        }else{
+            queue&lt;int&gt; te;
+            for(auto u : p){
+                ans ^= a[u];
+                a[u]--;
+                ans ^= a[u];
+                if(a[u]==0) te.push(u);
+            }
+            while(!te.empty()){
+                p.erase(te.front()); te.pop();
+            }
+        }
+        cout &lt;&lt; ans &lt;&lt; "\n";
+    }
+}
+
+            </code></pre>
+            <p>
+                decのほうは、\(A_x > 0\) である減らすべき \(x\) の個数がこれまでのincの回数を上回らないので、適切な構造でそういう \(x\) を管理することでAC<br>
+
+            </p>
+
+        </section>
+        <section>
+            <h2>駄文</h2>
+            <p>
+                突然の入青でびっくりして死んだ<br>
+                死者特典で入試免除とかないかな
+            </p>
+        </section>
+
+    </main>
+
+    <aside>
+        <div class="sidebar">
+
+            <h3><a href="https://kuronosu1024.github.io/about/">メインページへ</a></h3><br>
+            <h3><a href="https://kuronosu1024.github.io/about/diary/top.html">雑記</a></h3>
+
+            <hr>
+            <h3> 目次</h3>
+
+            <ul>
+                <li><a href="#diary">雑記</a></li>
+                <li><a href="#ABC">ABC470</a> </li>
+                <ul>
+                    <li><a href="#A">A</a></li>
+                    <li><a href="#B">B</a></li>
+                    <li><a href="#D">D</a></li>
+                    <li><a href="#F">F</a></li>
+                    <li><a href="#G">G</a></li>
+                    <li><a href="#C">C</a></li>
+                </ul>
+            </ul>
+
+            <hr>
+
+            <a href="#">一番上へ</a><br>
+
+        </div>
+        
+    </aside>
+
+</div>
+<script> hljs.highlightAll(); </script>
+
+<footer>
+    © 2026 kuronosu1024
+</footer>
+
+</body>
+</html>
