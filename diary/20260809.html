@@ -51,38 +51,38 @@
             </h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int n; cin >> n;
-    vector<pair<int,int>> u(n);
+    int n; cin &gt;&gt; n;
+    vector&lt;pair&lt;int,int&gt;&gt; u(n);
     int i;
-    rep(i,n) cin >> u[i].first >> u[i].second;
+    rep(i,n) cin &gt;&gt; u[i].first &gt;&gt; u[i].second;
     sort(all(u));
 
     mint ans = 1;
 
-    set<int> d;
+    set&lt;int&gt; d;
     int t=0, c=0;
     rep(i,n){
         t = u[i].first;
-        while(!d.empty() && *d.begin() <= t){
+        while(!d.empty() &amp;&amp; *d.begin() &lt;= t){
             d.erase(d.begin());
             c--;
         }
         if(c==0) ans*=2;
-        else if(c>1) ans *= 0;
+        else if(c&gt;1) ans *= 0;
         c++;
         d.insert(u[i].second); 
     }
-    cout << ans << "\n";
+    cout &lt;&lt; ans &lt;&lt; "\n";
 }
             </code></pre>
             <p>
                 各会議を \(N\) 頂点のグラフ \(G\) の頂点に対応させて、開催時間を共有する2つの会議どうしを辺でつなぐと、こういう問題になる↓<br>
                 <ul>
-                    <li>\(G\) の各頂点を2色 (高橋君と青木君) で塗り分ける方法は何通りあるか。</li>
+                    <li>\(G\) の各頂点を2色 (高橋君と青木君) で塗り分ける方法は何通りあるか。ただし、隣接する頂点を同じ色で塗ってはならない。</li>
                 </ul>
                 これは、\(G\) が2部グラフなら（\(S = Gの連結成分数\) とすると）答えは \(2^S\) で、
                 そうでなければ \(0\) です(証明は2部グラフが分かれば自明だと思います)<br>
-                2部グラフでないことは、今回の問題設定では「同時に3つ以上の会議が開催されている」ことと同値なので、これで解けます
+                2部グラフでないことは、今回の問題設定では「同時に3つ以上の会議が開催されている時刻が存在する」ことと同値なので、これで解けます
             </p>
 
             
@@ -94,18 +94,18 @@ int main(void){
             </h3> 
             <pre><code class="language-cpp">
 int main(void){
-    int T; cin >> T;
+    int T; cin &gt;&gt; T;
     for(;T--;){
-        int n,m ; cin >> n >> m;
+        int n,m ; cin &gt;&gt; n &gt;&gt; m;
         ll mx=0, mc=0, sx=0, sc=n, ux = -1;
-        vector<ll> a(m); int i;
-        rep(i,m) cin >> a[m-i-1];
-        ll h = 1ll<<(m);
+        vector&lt;ll&gt; a(m); int i;
+        rep(i,m) cin &gt;&gt; a[m-i-1];
+        ll h = 1ll&lt;&lt;(m);
 
         rep(i,m){
-            h>>=1;
+            h&gt;&gt;=1;
             if(ux != -1){
-                if(mx - ux > h*a[i]) {
+                if(mx - ux &gt; h*a[i]) {
                     ux += h*a[i];
                     continue;
                 }else{
@@ -116,10 +116,10 @@ int main(void){
             }
             if(mc != 0){
                 ll p = (mx-sx)/h;
-                if(p*sc > a[i]){
+                if(p*sc &gt; a[i]){
                     sc -= a[i]/p;
                     mc += a[i]/p;
-                    if(a[i]%p > 0){
+                    if(a[i]%p &gt; 0){
                         sc--;
                         ux = sx + h*(a[i]%p);
                     }
@@ -139,7 +139,7 @@ int main(void){
                 sc = n-mc;
             }
         }
-        cout << mx << "\n";
+        cout &lt;&lt; mx &lt;&lt; "\n";
     }
 }
             </code></pre>
@@ -168,7 +168,7 @@ int main(void){
                 </ul>
                 よって、\(X_{k+1}=X_k\) であり、操作は正当<br>
                 <br>
-                \(k=0\) では \(X_k = 0\) なのは疑う余地もないので、そこから上記の貪欲をすることで最適解を更新していける<br>
+                \(k=0\) で \(X_k = 0\) なのは疑う余地もないので、そこから上記の貪欲をすることで最適解を更新していける<br>
                 また、これによって生まれる袋の重さの種類は最大3種類で、そのうち間の重さのものは1個しか生じ得ないのでそれぞれの個数と重さを管理することで高速化が可能<br>
                 →これによって\(O(M)\)で解けます
             </p>
