@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>日記-20260809 - kuronosu1024</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../style.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script> <!--上と二つ合わせてc++コードのエディタ風表示用-->
+
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><!--latexみたいに数式を書く用-->
+
+    <style>
+    </style>
+    
+</head>
+<body>
+    
+<div class="container">
+    <header>
+        日記 - 20260809 (ARC226)
+    </header>
+</div>
+
+<div class="container">
+    <main>
+        <section id="diary">
+            <h2>雑記</h2>
+            <p>
+                最近昼ずっと寝てるせいで食事の回数が少ない（なのに空腹感はさほどなく、謎）
+            </p>
+        </section>
+        <section id="ARC">
+            <h2><a href="https://atcoder.jp/contests/arc226">ARC226</a>参加記の部分</h2>
+            <p>
+                入青から即落ち2コマすることなく無事勝利　嬉しい～～～
+                
+                
+            </p>
+            <p>
+                <a href="https://atcoder.jp/contests/arc226/submissions?f.Task=&f.LanguageName=&f.Status=&f.User=kuronosu1024">今回の提出一覧</a>
+            </p>
+
+            <h3 id="A" class="prob">
+                <a href="https://atcoder.jp/contests/arc226/tasks/arc226_a">
+                    A - Meeting Division
+                </a>
+                <div class ="text-small">(7'10)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int n; cin >> n;
+    vector<pair<int,int>> u(n);
+    int i;
+    rep(i,n) cin >> u[i].first >> u[i].second;
+    sort(all(u));
+
+    mint ans = 1;
+
+    set<int> d;
+    int t=0, c=0;
+    rep(i,n){
+        t = u[i].first;
+        while(!d.empty() && *d.begin() <= t){
+            d.erase(d.begin());
+            c--;
+        }
+        if(c==0) ans*=2;
+        else if(c>1) ans *= 0;
+        c++;
+        d.insert(u[i].second); 
+    }
+    cout << ans << "\n";
+}
+            </code></pre>
+            <p>
+                各会議を \(N\) 頂点のグラフ \(G\) の頂点に対応させて、開催時間を共有する2つの会議どうしを辺でつなぐと、こういう問題になる↓<br>
+                <ul>
+                    <li>\(G\) の各頂点を2色 (高橋君と青木君) で塗り分ける方法は何通りあるか。</li>
+                </ul>
+                これは、\(G\) が2部グラフなら（\(S = Gの連結成分数\) とすると）答えは \(2^S\) で、
+                そうでなければ \(0\) です(証明は2部グラフが分かれば自明だと思います)<br>
+                2部グラフでないことは、今回の問題設定では「同時に3つ以上の会議が開催されている」ことと同値なので、これで解けます
+            </p>
+
+            
+            <h3 id="B" class="prob">
+                <a href="https://atcoder.jp/contests/arc226/tasks/arc226_b">
+                    B - Bin-ary Packing
+                </a>
+                <div class ="text-small">(28'19)</div>
+            </h3> 
+            <pre><code class="language-cpp">
+int main(void){
+    int T; cin >> T;
+    for(;T--;){
+        int n,m ; cin >> n >> m;
+        ll mx=0, mc=0, sx=0, sc=n, ux = -1;
+        vector<ll> a(m); int i;
+        rep(i,m) cin >> a[m-i-1];
+        ll h = 1ll<<(m);
+
+        rep(i,m){
+            h>>=1;
+            if(ux != -1){
+                if(mx - ux > h*a[i]) {
+                    ux += h*a[i];
+                    continue;
+                }else{
+                    a[i] -= (mx-ux)/h;
+                    ux = -1;
+                    mc++;
+                }
+            }
+            if(mc != 0){
+                ll p = (mx-sx)/h;
+                if(p*sc > a[i]){
+                    sc -= a[i]/p;
+                    mc += a[i]/p;
+                    if(a[i]%p > 0){
+                        sc--;
+                        ux = sx + h*(a[i]%p);
+                    }
+                    a[i] = 0;
+                    continue;
+                }else{
+                    a[i]-=p*sc;
+                    mc=0;
+                    sc=n;
+                    sx=mx;
+                }
+            }
+            if(mc == 0){
+                sx += h*(a[i]/n);
+                mx = sx + h*(a[i]%n!=0);
+                mc = a[i]%n;
+                sc = n-mc;
+            }
+        }
+        cout << mx << "\n";
+    }
+}
+            </code></pre>
+            <p>
+                想定解は解の2分探索らしいが、maspyさんのユーザ解説と(ほぼ)同じ重いほうから振り分けるやつで解いた<br>
+                具体的には、全ての荷物について重い順に
+                <ul>
+                    <li>①袋の重さがすべて同じとき</li>
+                    分けなおすことなくそのままどれかに入れる
+                    <li>②そうでないとき</li>
+                    一番重くない袋のうち最も重いものに入れる
+                </ul>
+                正当性については、荷物の総数を \(S\) 、重い順に前からk個の荷物に対する最適解を \(X_k\) としたとき、<br>
+                <br>
+                ①について、その袋の重さ（＝最適解）を \( X_k \) とし、それに重さ \(2^a\) の荷物を一つ追加するとき
+                <ul>
+                    <li>既に分けられた荷物のそれぞれの重さは全て \(2^a\) の倍数である。今追加する荷物を含めた全ての荷物を重さ \(2^a\) に分解した問題の解は \(X_k + 2^a\) で、分解する前の問題の最適解はこれ以上である</li>
+                    <li>この最適解の下限 \(X_k + 2^a\) は、前述した操作で達成可能である</li>
+                </ul>
+                よって \(X_{k+1}=X_k + 2^a \) であり、操作は正当<br>
+                <br>
+                ②について、それまでの分け方が最適であると仮定し、それを \(X_k\) としてそこに重さ \(2^a\) の荷物を一つ追加するとき<br>
+                <ul>
+                    <li>一番重くない袋のうち最も重いものの重さを \(W\) としたとき、既に分けられた荷物のそれぞれの重さは全て \(2^a\) の倍数であるので、\(X_k - W\) もまた \(2^a\) の倍数である。よって \(X_k - W \ge 2^a\) であり、操作によって袋の重さが \(X_k\) を超えることはない</li>
+                    <li>また、\(X_i \le X_j\) \((i\lt j)\)  （なぜならば、最適解 \(X_j\) の構成方法からいくつか取り除くことで、明らかに \(X_j\) 以下の解 \(X_i\) が得られるため）</li>
+                </ul>
+                よって、\(X_{k+1}=X_k\) であり、操作は正当<br>
+                <br>
+                \(k=0\) では \(X_k = 0\) なのは疑う余地もないので、そこから上記の貪欲をすることで最適解を更新していける<br>
+                また、これによって生まれる袋の重さの種類は最大3種類で、そのうち間の重さのものは1個しか生じ得ないのでそれぞれの個数と重さを管理することで高速化が可能<br>
+                →これによって\(O(M)\)で解けます
+            </p>
+
+
+            <h3 id="C" class="prob">
+                <a href="https://atcoder.jp/contests/arc226/tasks/arc226_c">
+                    C - Square Corner Packing
+                </a>
+                <div class ="text-small">(--'-- 2x)</div>
+            </h3> 
+            <p>
+                偶x偶、偶x奇はわかったけど奇x奇の-4する遷移を生やせませんでした（泣）    
+            </p>
+
+        </section>
+
+        <section>
+            <h2>駄文</h2>
+            <p>
+                夏休み中勉強してなくてカス過ぎて滅 ←んなこと書いてないでやれ<br>
+            </p>
+        </section>
+
+    </main>
+
+    <aside>
+        <div class="sidebar">
+
+            <h3><a href="https://kuronosu1024.github.io/about/">メインページへ</a></h3><br>
+            <h3><a href="https://kuronosu1024.github.io/about/diary/top.html">雑記</a></h3>
+
+            <hr>
+            <h3> 目次</h3>
+
+            <ul>
+                <li><a href="#diary">雑記</a></li>
+                <li><a href="#ARC">ARC225</a> </li>
+                <ul>
+                    <li><a href="#A">A</a></li>
+                    <li><a href="#B">B</a></li>
+                    <li><a href="#C">C</a></li>
+                    <li><a href="#D">D</a></li>
+                </ul>
+            </ul>
+
+            <hr>
+
+            <a href="#">一番上へ</a><br>
+
+        </div>
+        
+    </aside>
+
+</div>
+<script> hljs.highlightAll(); </script>
+
+<footer>
+    © 2026 kuronosu1024
+</footer>
+
+</body>
+</html>
